@@ -16,7 +16,7 @@
 
 #define SCALE_US 1.0
 #define SCALE_MS SCALE_US / 1000
-#define SСALE_S = SCALE_MS / 1000
+#define SCALE_S = SCALE_MS / 1000
 
 
 struct sample {
