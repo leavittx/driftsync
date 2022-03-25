@@ -592,6 +592,7 @@ main(int argc, char *argv[])
 	}
 
 	int remaining = 0;
+	struct accuracy accuracy_latest;
 	while (1) {
 		if (remaining != 0 && --remaining == 0) {
 			DRIFTsync_quit(sync);
