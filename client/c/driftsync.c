@@ -16,7 +16,7 @@
 
 #define SCALE_US 1.0
 #define SCALE_MS SCALE_US / 1000
-#define SALE_S = SCALE_MS / 1000
+#define SСALE_S = SCALE_MS / 1000
 
 
 struct sample {
@@ -571,7 +571,7 @@ main(int argc, char *argv[])
 	sigaction(SIGTERM, &action, NULL);
 
 	struct DRIFTsync *sync = DRIFTsync_create(argc > 1 ? argv[1] : "localhost",
-		DRIFTSYNC_PORT, SCALE_MS, 5000 * 1000, 1);
+		DRIFTSYNC_PORT, SCALE_S, 5000 * 1000, 1);
 	if (sync == NULL)
 		return 1;
 
@@ -600,24 +600,31 @@ main(int argc, char *argv[])
 		}
 
 		struct accuracy accuracy;
-		DRIFTsync_accuracy(sync, &accuracy, 1, 0, 15000 * 1000);
+		DRIFTsync_accuracy(sync, &accuracy, 0, 0, 15000 * 1000);
+		if (accuracy.max > 0.0)
+			memcpy(&accuracy_latest, &accuracy, sizeof(accuracy));
 
-		struct statistics stats;
-		DRIFTsync_statistics(sync, &stats);
+		//struct statistics stats;
+		//DRIFTsync_statistics(sync, &stats);
 
 		double globalTime = DRIFTsync_globalTime(sync);
 
-		printf("global %.3f ms offset %.3f ms\n", globalTime,
-			DRIFTsync_offset(sync));
-		printf("clock rate %.9f %.9f\n", DRIFTsync_clockRate(sync),
-			DRIFTsync_suggestPlaybackRate(sync, globalTime, 0));
 		printf("median round trip time %.3f ms\n",
-			DRIFTsync_medianRoundTripTime(sync));
-		printf("sent %d lost %d rejected %d\n",
-			stats.sentRequests, stats.sentRequests - stats.receivedSamples,
-			stats.rejectedSamples);
-		printf("accuracy min %.3f ms average %.3f ms max %.3f ms\n\n",
-			accuracy.min, accuracy.average, accuracy.max);
+			);
+
+		printf("global %.3f s accuracy avg %.7f ms max %.7f ms RTT %.7f\r", globalTime, accuracy.average, accuracy.max, DRIFTsync_medianRoundTripTime(sync));
+
+		// printf("global %.3f ms offset %.3f ms\n", globalTime,
+			// DRIFTsync_offset(sync));
+		// printf("clock rate %.9f %.9f\n", DRIFTsync_clockRate(sync),
+			// DRIFTsync_suggestPlaybackRate(sync, globalTime, 0));
+		// printf("median round trip time %.3f ms\n",
+			// DRIFTsync_medianRoundTripTime(sync));
+		// printf("sent %d lost %d rejected %d\n",
+			// stats.sentRequests, stats.sentRequests - stats.receivedSamples,
+			// stats.rejectedSamples);
+		// printf("accuracy min %.3f ms average %.3f ms max %.3f ms\n\n",
+			// accuracy.min, accuracy.average, accuracy.max);
 		fflush(stdout);
 	}
 
