@@ -230,7 +230,7 @@ if __name__ == '__main__':
 	import sys
 
 	sync = DRIFTsync(sys.argv[1] if len(sys.argv) > 1 else 'localhost',
-		scale=SCALE_MS, measureAccuracy=True)
+		scale=SCALE_S, measureAccuracy=True)
 
 	if '--stream' in sys.argv:
 		while True:
@@ -245,14 +245,20 @@ if __name__ == '__main__':
 				sync.quit()
 				break
 
-		minDelta, averageDelta, maxDelta = sync.accuracy(True)
-		sent, received, rejected = sync.statistics
+		#minDelta, averageDelta, maxDelta = sync.accuracy(True)
+		#sent, received, rejected = sync.statistics
 		globalTime = sync.globalTime()
 
-		print(f'global {globalTime:.3f} ms offset {sync.offset:.3f} ms')
-		print(f'clock rate {sync.clockRate:.9f}')
-		print(f'median round trip time {sync.medianRoundTripTime():.3f} ms')
-		print(f'sent {sent} lost {sent - received} rejected {rejected}')
-		print(f'accuracy min {minDelta:.3f} ms average {averageDelta:.3f} ms'
-			f' max {maxDelta:.3f} ms')
-		print()
+		#print(, end="")
+        
+		sys.stdout.write(f'global {globalTime:.3f} s\r')
+		sys.stdout.flush()
+
+
+		#print(f'global {globalTime:.3f} ms offset {sync.offset:.3f} ms')
+		#print(f'clock rate {sync.clockRate:.9f}')
+		#print(f'median round trip time {sync.medianRoundTripTime():.3f} ms')
+		#print(f'sent {sent} lost {sent - received} rejected {rejected}')
+		#print(f'accuracy min {minDelta:.3f} ms average {averageDelta:.3f} ms'
+		#	f' max {maxDelta:.3f} ms')
+		#print()
