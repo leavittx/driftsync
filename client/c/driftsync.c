@@ -610,9 +610,6 @@ main(int argc, char *argv[])
 
 		double globalTime = DRIFTsync_globalTime(sync);
 
-		printf("median round trip time %.3f ms\n",
-			);
-
 		printf("global %.3f s accuracy avg %.7f ms max %.7f ms RTT %.7f\r", globalTime, accuracy.average, accuracy.max, DRIFTsync_medianRoundTripTime(sync));
 
 		// printf("global %.3f ms offset %.3f ms\n", globalTime,
